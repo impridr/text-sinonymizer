@@ -1,0 +1,43 @@
+{
+  "name": "profile/text-sinonymizer",
+  "description": "Sinonymize text.",
+  "type": "library",
+  "version": "1.0.0",
+  "license": "proprietary",
+  "minimum-stability": "stable",
+  "require": {
+    "php": "7.4.*",
+    "ext-json": "*",
+    "profile/http-client": "dev-master",
+    "profile/text-translator": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "9.5.*"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:vadim-malashenko/http-client.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:impridr/text-translator.git"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Profile\\Text\\Sinonymizer\\": "src/"
+    },
+    "classmap": [
+      "src"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Profile\\Text\\Sinonymizer\\Test\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit --testsuite unit"
+  }
+}
