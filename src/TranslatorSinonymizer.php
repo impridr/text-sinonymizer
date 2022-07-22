@@ -1,20 +1,32 @@
 <?php
 
-namespace Profile\Text;
+namespace Profile\Text\Sinonymizer;
 
-use Profile\Text\Translator\Google\GtxGoogleTranslator;
+use \Profile\Http\Client\CurlClient;
+use \Profile\Text\Translator\DictChromeExGoogleTranslator;
 
-class TranslatorSinonymizer extends GtxGoogleTranslator implements SinonymizerInterface
+class TranslatorSinonymizer extends DictChromeExGoogleTranslator implements SinonymizerInterface
 {
-    public function sinonymize(array $texts): array
+    protected array $languages;
+
+    public static function create(array $languages): self
     {
-        return $this->translate(
-            array_filter(
-                $this->translate($texts, 'ru', 'en'),
-                static fn(string $text): bool => is_string($text)
-            ),
-            'en',
-            'ru'
-        );
+        $instance = new static(new CurlClient());
+        $instance->languages = $languages;
+
+        return $instance;
+    }
+
+    public function sinonymize(string $text): string
+    {
+        $languages = $this->languages;
+        $languages[] = $sourceLanguage = array_shift($languages);
+
+        while ($targetLanguage = array_shift($languages)) {
+            $text = $this->translate($text, $sourceLanguage, $targetLanguage);
+            $sourceLanguage = $targetLanguage;
+        }
+
+        return $text;
     }
 }

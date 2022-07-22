@@ -1,8 +1,8 @@
 <?php
 
-namespace Profile\Text;
+namespace Profile\Text\Sinonymizer;
 
 interface SinonymizerInterface
 {
-    public function sinonymize(array $texts): array;
+    public function sinonymize(string $text): string;
 }

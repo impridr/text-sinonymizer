@@ -2,7 +2,7 @@
 <phpunit>
     <testsuites>
         <testsuite name="unit">
-            <!--file>tests\SinonymizerTest.php</file-->
+            <file>tests/TranslatorSinonymizerTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

@@ -7,7 +7,9 @@
   "minimum-stability": "stable",
   "require": {
     "php": "7.4.*",
+    "ext-mbstring": "*",
     "ext-json": "*",
+    "profile/http-message": "dev-master",
     "profile/http-client": "dev-master",
     "profile/text-translator": "dev-master"
   },
@@ -17,7 +19,11 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "git@github.com:vadim-malashenko/http-client.git"
+      "url": "git@github.com:impridr/http-message.git"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:impridr/http-client.git"
     },
     {
       "type": "vcs",
