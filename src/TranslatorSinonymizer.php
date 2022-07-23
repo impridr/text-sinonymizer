@@ -3,20 +3,31 @@
 namespace Profile\Text\Sinonymizer;
 
 use \Profile\Http\Client\CurlClient;
-use \Profile\Text\Translator\DictChromeExGoogleTranslator;
+use \Profile\Text\Translator\{TranslatorInterface, DictChromeExGoogleTranslator};
 
-class TranslatorSinonymizer extends DictChromeExGoogleTranslator implements SinonymizerInterface
+class TranslatorSinonymizer implements SinonymizerInterface
 {
+    protected TranslatorInterface $translator;
     protected array $languages = [];
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
 
     public static function create(array $languages = []): self
     {
-        return (new static(new CurlClient()))->withLanguages($languages);
+        $instance = new static(new DictChromeExGoogleTranslator(new CurlClient()));
+        $instance->setLanguages($languages);
+        
+        return $instance;
     }
     
     public function setLanguages(array $languages): void
     {
         $this->languages = [];
+
+        if (empty($languages)) return;
 
         $sourceLanguage = array_shift($languages);
         $languages[] = $sourceLanguage;
@@ -44,7 +55,7 @@ class TranslatorSinonymizer extends DictChromeExGoogleTranslator implements Sino
     {
         return array_reduce(
             $this->getLanguages(),
-            fn ($text, $languagePair) => $this->translate($text, ... $languagePair),
+            fn ($text, $languagePair) => $this->translator->translate($text, ... $languagePair),
             $text
         );
     }
