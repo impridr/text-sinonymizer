@@ -3,11 +3,29 @@
 namespace Profile\Text\Sinonymizer\Test;
 
 use \PHPUnit\Framework\TestCase;
-
+use Profile\Text\Sinonymizer\SinonymizerInterface;
 use \Profile\Text\Sinonymizer\TranslatorSinonymizer;
 
 class TranslatorSinonymizerTest extends TestCase
 {
+    public function getLanguagesProvider()
+    {
+        return [
+            [
+                ['ru', 'en'],
+                [['ru', 'en'], ['en', 'ru']]
+            ],
+            [
+                ['ru', 'en', 'fr'],
+                [['ru', 'en'], ['en', 'fr'], ['fr', 'ru']]
+            ],
+            [
+                ['ru', 'ru', 'en', 'en', 'fr'],
+                [['ru', 'en'], ['en', 'fr'], ['fr', 'ru']]
+            ]
+        ];
+    }
+
     public function sinonymizeProvider()
     {
         return [
@@ -34,6 +52,22 @@ TOO_LONG_TEXT,
                 \InvalidArgumentException::class
             ]
         ];
+    }
+
+    /**
+     * @dataProvider getLanguagesProvider
+     * @param array $languages
+     * @param array $expected
+     */
+    public function testGetLanguages(array $languages, array $expected)
+    {
+        $sinonymizer = TranslatorSinonymizer::create();
+        $sinonymizer->setLanguages($languages);
+
+        $this->assertEquals($expected, $sinonymizer->getLanguages());
+
+        $this->assertEquals($expected, TranslatorSinonymizer::create()->withLanguages($languages)->getLanguages());
+        $this->assertEquals($expected, TranslatorSinonymizer::create($languages)->getLanguages());
     }
 
     /**
