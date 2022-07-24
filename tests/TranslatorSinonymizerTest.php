@@ -26,9 +26,46 @@ class TranslatorSinonymizerTest extends TestCase
         ];
     }
 
+    public function excludeProvider()
+    {
+        return [
+            [
+                [
+                    '#(?<=\s)[A-ZЁА-Я]\S+(?=(\s|\W))#u',
+                    '#«[^»]+»#u'
+                ],
+                'Стало известно о планах Трасс занять «пост премьера» Британии за счет темы России и «так далее».',
+                'Стало известно о планах (%%0%%) Трасс (%%0%%) занять (%%1%%) «пост премьера» (%%1%%) (%%2%%) Британии (%%2%%) за счет темы (%%3%%) России (%%3%%) и (%%4%%) «так далее» (%%4%%).'
+            ]
+        ];
+    }
+
+    public function includeProvider()
+    {
+        return [
+            [
+                [
+                    '#(?<=\s)[A-ZЁА-Я]\S+(?=(\s|\W))#u',
+                    '#«[^»]+»#u'
+                ],
+                'Стало известно о планах Трасс занять «пост премьера» Британии за счет темы России и «так далее».',
+            ]
+        ];
+    }
+
     public function sinonymizeProvider()
     {
         return [
+            [
+'Стало известно о планах Трасс занять пост премьера Британии за счет темы России.
+
+В США рассказали о «тревожном феномене» после поездки Путина в Иран.',
+                ['ru', 'en'],
+'Стало известно о планах треков, чтобы занять должность премьер -министра Британии за счет темы России.
+
+В США они говорили о «тревожном явлении» после поездки Путина в Иран.',
+                null
+            ],
             [
                 'Стало известно о состоянии первого в России пациента с оспой обезьян',
                 ['ru', 'en'],
@@ -78,6 +115,30 @@ class TranslatorSinonymizerTest extends TestCase
 
         $this->assertEquals($expected, TranslatorSinonymizer::create()->withLanguages($languages)->getLanguages());
         $this->assertEquals($expected, TranslatorSinonymizer::create($languages)->getLanguages());
+    }
+
+    /**
+     * @dataProvider excludeProvider
+     * @param array $excludes
+     * @param string $text
+     * @param string $expected
+     */
+    public function testExclude(array $excludes, string $text, string $expected)
+    {
+        $this->assertEquals($expected, TranslatorSinonymizer::create()->withExcludes($excludes)->exclude($text));
+    }
+
+    /**
+     * @dataProvider includeProvider
+     * @param array $excludes
+     * @param string $text
+     */
+    public function testInclude(array $excludes, string $text)
+    {
+        $sinonymizer = TranslatorSinonymizer::create();
+        $sinonymizer->setExcludes($excludes);
+
+        $this->assertEquals($text, $sinonymizer->include($sinonymizer->exclude($text)));
     }
 
     /**
