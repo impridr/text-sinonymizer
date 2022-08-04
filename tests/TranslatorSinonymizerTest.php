@@ -3,9 +3,7 @@
 namespace Profile\Text\Sinonymizer\Test;
 
 use \PHPUnit\Framework\TestCase;
-use Profile\Text\Sinonymizer\Filter\ProperNounsFilter;
-use Profile\Text\Sinonymizer\Filter\QuotationMarksFilter;
-use Profile\Text\Sinonymizer\Filter\TagsFilter;
+
 use \Profile\Text\Sinonymizer\TranslatorSinonymizer;
 
 class TranslatorSinonymizerTest extends TestCase
@@ -14,7 +12,7 @@ class TranslatorSinonymizerTest extends TestCase
 
     public const EXCLUDES = [
         "#(«[^»]+»)|('[^']+')|(\"[^\"]+\")#u",
-        "#(?<=([^.!?\s]\s))[A-ZЁА-Я][^\s.!?]+(?=(\s|\W))#u"
+        "#([^.!?'\"«])+\s([A-ZЁА-Я][^\s.!?'\"»]+)(\s|[.!?])#u"
     ];
 
     public function setLanguagesProvider()

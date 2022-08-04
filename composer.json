@@ -9,7 +9,7 @@
     "php": "7.4.*",
     "ext-mbstring": "*",
     "ext-json": "*",
-    "profile/http-message": "dev-master",
+    "profile/http-message": "1.0.0",
     "profile/http-client": "dev-master",
     "profile/text-translator": "dev-master"
   },
