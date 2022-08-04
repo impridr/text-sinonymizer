@@ -10,8 +10,8 @@
     "ext-mbstring": "*",
     "ext-json": "*",
     "profile/http-message": "1.0.0",
-    "profile/http-client": "dev-master",
-    "profile/text-translator": "dev-master"
+    "profile/http-client": "1.0.0",
+    "profile/text-translator": "1.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": "9.5.*"
